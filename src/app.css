@@ -101,3 +101,12 @@
 .tab {
   @apply flex flex-row justify-between items-center py-1 px-4 border-r gap-x-5 h-full
 }
+
+.alert-container {
+  position: fixed;
+  left: 50%;
+  top: 10%;
+  z-index: 1000; /* Ensure it's above other content */
+  width: auto; /* Adjust width as needed */
+  max-width: 300px; /* Adjust max width as needed */
+}

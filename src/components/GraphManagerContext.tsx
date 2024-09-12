@@ -4,14 +4,16 @@ import { Graph, GraphEdge, GraphManager, GraphNode } from "@/lib/core";
 
 // Interface defining the Graph Manager structure
 export interface GraphManagerInterface {
-  graphs: () => Graph[]; // Reactive getter function for graphs
-  currentGraph: () => Graph | undefined; // Reactive getter function for current graph
-  selectedNodes: () => GraphNode[]; // Reactive getter function for selected nodes
-  selectedEdges: () => GraphEdge[]; // Reactive getter function for selected edges
-  setGraphs: (graphs: Graph[]) => void; // Setter function for graphs
-  setCurrentGraph: (graph: Graph | undefined) => void; // Setter function for current graph
-  setSelectedNodes: (nodes: GraphNode[]) => void; // Setter function for selected nodes
-  setSelectedEdges: (edges: GraphEdge[]) => void; // Setter function for selected edges
+  graphs: () => Graph[];
+  currentGraph: () => Graph | undefined;
+  selectedNodes: () => GraphNode[];
+  selectedEdges: () => GraphEdge[];
+  setGraphs: (graphs: Graph[]) => void;
+  setCurrentGraph: (graph: Graph | undefined) => void;
+  setSelectedNodes: (nodes: GraphNode[]) => void;
+  setSelectedEdges: (edges: GraphEdge[]) => void;
+  debug: () => boolean;
+  setDebug: (bool : boolean) => void;
 }
 
 // Create a context to provide the GraphManager globally
@@ -32,6 +34,7 @@ export function GraphManagerProvider(props: { children: any }) {
   const [currentGraph, setCurrentGraph] = createSignal<Graph>();
   const [selectedNodes, setSelectedNodes] = createSignal<GraphNode[]>([]);
   const [selectedEdges, setSelectedEdges] = createSignal<GraphEdge[]>([]);
+  const [debug, setDebug] = createSignal<boolean>(true);
 
   return (
     <GraphManagerContext.Provider value={{
@@ -42,7 +45,9 @@ export function GraphManagerProvider(props: { children: any }) {
       selectedNodes,
       setSelectedNodes,
       selectedEdges,
-      setSelectedEdges
+      setSelectedEdges,
+      debug,
+      setDebug,
     }}>
       {props.children}
     </GraphManagerContext.Provider>

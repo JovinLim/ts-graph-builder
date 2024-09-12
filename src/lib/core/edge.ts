@@ -8,7 +8,7 @@ export class GraphEdge {
     private source_: string;
     private target_: string;
   
-    constructor(graphId: string, source: string, target: string, label: string = "", attributes: Record<any, any> = {}) {
+    constructor(graphId: string, label: string = "", source: string, target: string, attributes: Record<any, any> = {}) {
       this.id_ = uuidv4();  // Assign a random UUID
       this.label_ = label;
       this.graphId_ = graphId;

@@ -2,3 +2,4 @@ export * from './graph';
 export * from './node';
 export * from './edge';
 export * from './graphmanager';
+export * from './graphparser';

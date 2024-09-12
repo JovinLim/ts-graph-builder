@@ -18,6 +18,7 @@ export default function GraphCanvas() {
         ) : (
           // Render placeholder text when no graph is selected
           <div class="graph-viewer-btn-container">
+            <p class="text-gray-500 text-2xl">Graph Canvas</p>
             <p class="text-gray-500 text-xl">No graph chosen</p>
             <CreateGraph />
           </div>
