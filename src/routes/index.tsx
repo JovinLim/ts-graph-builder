@@ -3,6 +3,7 @@ import GraphCanvas from "@/components/GraphCanvas";
 import { GraphManagerProvider } from "@/components/GraphManagerContext";
 import GraphViewer from "@/components/GraphViewer";
 import Tabs from "@/components/Tabs";
+import Toolbox from "@/components/Toolbox";
 
 export default function Home() {
 
@@ -11,6 +12,7 @@ export default function Home() {
       <AlertManager/>
       <main class='flex flex-col h-screen'>
         <Tabs/>
+        <Toolbox/>
         {/* <button onclick={() => {console.log('test')}} >test</button> */}
         <div class="flex flex-row h-[95%] text-gray-700 items-center justify-center">
           {/* Left section for Graph Viewer */}

@@ -110,3 +110,7 @@
   width: auto; /* Adjust width as needed */
   max-width: 300px; /* Adjust max width as needed */
 }
+
+.toolbox {
+  @apply fixed z-[50] bottom-[5%] left-1/2 -translate-x-1/2 w-3/4 max-w-2xl bg-gray-100 border rounded-xl drop-shadow -translate-y-1/2 flex flex-row gap-5 p-3 items-center
+}

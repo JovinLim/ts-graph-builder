@@ -67,22 +67,21 @@ export default function GraphViewer() {
                     const nodeData = nodes[nodeKey as keyof typeof nodes];
                     nodes_.push(new GraphNode(graph.id, nodeKey, nodeData));
                 }
-
-                for (let e=0; e<edgeKeys.length; e++){
-                    const edgeKey = edgeKeys[e];
-                    const edgeData = edges[edgeKey as keyof typeof edges];
-                    const edgeAttr = {'cat':edgeData.cat}
-                    edges_.push(new GraphEdge(graph.id, edgeKey, edgeData.source, edgeData.target, edgeAttr));
-                }
-
                 graph.nodes = nodes_;
-                graph.edges = edges_;
+
+                // for (let e=0; e<edgeKeys.length; e++){
+                //     const edgeKey = edgeKeys[e];
+                //     const edgeData = edges[edgeKey as keyof typeof edges];
+                //     const edgeAttr = {'cat':edgeData.cat}
+                //     edges_.push(new GraphEdge(graph.id, edgeKey, edgeData.source, edgeData.target, edgeAttr));
+                // }
+                // graph.edges = edges_;
 
 
-        // Debug
-        console.log(nodes_[0]);
-        console.log(edges_[0]);
-            });
+                // Debug
+                console.log(nodes_[0]);
+                // console.log(edges_[0]);
+          });
         }
 
         setGraphs([...graphs(), graph]);

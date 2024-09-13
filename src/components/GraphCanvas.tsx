@@ -69,13 +69,6 @@ export default function GraphCanvas() {
         var midY = y + (bboxHeight/2);
 
         if (bboxWidth == 0 || bboxHeight == 0) {return}
-
-        // Set the viewBox to fit the bounding box
-        // svg.attr("viewBox", `${x} ${y} ${bboxWidth} ${bboxHeight}`);
-        
-        // // Adjust zoom to fit the bounding box initially
-        // const svgWidth = svg.node()?.clientWidth || 800; // Fallback to default width if not available
-        // const svgHeight = svg.node()?.clientHeight || 600; // Fallback to default height if not available
         
         // const scale = (0.75) / Math.min(svgWidth / bboxWidth, svgHeight / bboxHeight); // Calculate scale to fit
         const scale = (0.75) / Math.min(bboxWidth / parentWidth, bboxHeight / parentHeight); // Calculate scale to fit
