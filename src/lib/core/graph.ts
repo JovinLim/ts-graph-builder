@@ -71,9 +71,10 @@ export class Graph {
         .attr("cursor", "grab");
   
       function dragged(this: SVGRectElement, event: d3.D3DragEvent<SVGElement, any, any>, d: any) {
+        console.log(d)
         d3.select(this)
-          .attr("x", event.x)
-          .attr("y", event.y);
+          .attr("x", d.x=event.x)
+          .attr("y", d.y=event.y);
       }
 
       const drag = d3.drag<SVGRectElement, any>()
@@ -84,10 +85,13 @@ export class Graph {
         const { center, cornerA, cornerB, id, label } = node.attributes;
         try {
           if (cornerA && cornerB) {
+            const rectData = { x: Math.min(cornerA[0], cornerB[0]), y: Math.min(cornerA[1], cornerB[1]) };
+
             // Draw a rectangle based on cornerA and cornerB coordinates
             g.append("rect")
-              .attr("x", Math.min(cornerA[0], cornerB[0]))
-              .attr("y", Math.min(cornerA[1], cornerB[1]))
+              .datum(rectData)
+              .attr("x", rectData.x)
+              .attr("y", rectData.y)
               .attr("width", Math.abs(cornerA[0] - cornerB[0]))
               .attr("height", Math.abs(cornerA[1] - cornerB[1]))
               .attr("fill", "#68b2a1")
