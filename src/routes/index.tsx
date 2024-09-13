@@ -5,11 +5,13 @@ import GraphViewer from "@/components/GraphViewer";
 import Tabs from "@/components/Tabs";
 
 export default function Home() {
+
   return (
     <GraphManagerProvider>
-        <AlertManager/>
+      <AlertManager/>
       <main class='flex flex-col h-screen'>
         <Tabs/>
+        {/* <button onclick={() => {console.log('test')}} >test</button> */}
         <div class="flex flex-row h-[95%] text-gray-700 items-center justify-center">
           {/* Left section for Graph Viewer */}
           <div class="flex w-1/2 h-full border-r border-gray-200 p-4 items-center justify-center">

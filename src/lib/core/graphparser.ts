@@ -1,6 +1,6 @@
 export async function parseGraphJSON(jsonFile: File): Promise<{ nodes: any[]; edges: any[] }> {
     return new Promise((resolve, reject) => {
-      const reader = new FileReader(); // Create a new FileReader instance
+      const reader = new FileReader();
   
       reader.onload = () => {
         try {

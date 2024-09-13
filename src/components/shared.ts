@@ -1,7 +1,7 @@
 import { createSignal } from "solid-js";
 import {v4 as uuidv4} from 'uuid';
 
-export const [uploadedFile, setUploadedFile] = createSignal<File | null>(null);
+export const [uploadedFile, setUploadedFile] = createSignal<File>();
 export const [alerts, setAlerts] = createSignal<{date:string, title:string, message:string, id:string}[]>([]);
 
 
