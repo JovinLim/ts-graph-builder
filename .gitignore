@@ -26,3 +26,7 @@ gitignore
 # System Files
 .DS_Store
 Thumbs.db
+
+# Conda config
+.conda_config
+.conda_config.Zone.Identifier
