@@ -29,4 +29,4 @@ Thumbs.db
 
 # Conda config
 .conda_config
-.conda_config.Zone.Identifier
+.conda_config:Zone.Identifier
