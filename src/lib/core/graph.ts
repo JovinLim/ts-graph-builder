@@ -11,7 +11,6 @@ export class Graph {
     private attributes_: Record<any, any>;
     private nodes_: GraphNode[];
     private edges_: GraphEdge[];
-    
 
     constructor(label: string = "", attributes: Record<any, any> = {}, nodes: GraphNode[] = [], edges: GraphEdge[] = []) {
       this.id_ = uuidv4().toString();
@@ -58,48 +57,80 @@ export class Graph {
       this.edges_ = value;
     }
 
-    public autoEdge(): GraphEdge[] {
+    public autoEdge(tolerance:number = 1): GraphEdge[] {
       const outEdges = [] as GraphEdge[];
+
       var edgeCount = 0;
       if (this.nodes.length === 0) {
         return outEdges; // Return an empty array if there are no nodes
       }
     
-      // Iterate through each node in the graph
-      for (let i = 0; i < this.nodes.length; i++) {
-        const currentNode = this.nodes[i];
-    
-        // Iterate through each other node to create edges
-        for (let j = 0; j < this.nodes.length; j++) {
-          const otherNode = this.nodes[j];
-    
+
+      const calculateBoundingBox = (cornerA: [number, number], cornerB: [number, number]) => {
+        const x = Math.min(cornerA[0], cornerB[0]);
+        const y = Math.min(cornerA[1], cornerB[1]);
+        const width = Math.abs(cornerA[0] - cornerB[0]);
+        const height = Math.abs(cornerA[1] - cornerB[1]);
+        return { x, y, width, height };
+      };
+
+      const nodesBoundingBoxes = this.nodes.map((node) => {
+        const boundingBox = calculateBoundingBox(node.attributes.cornerA, node.attributes.cornerB);
+        return { id: node.id, label: node.label, boundingBox };
+      });
+
+      // Iterate through each node and find aligned nodes
+      for (let i = 0; i < nodesBoundingBoxes.length; i++) {
+        const cNode = nodesBoundingBoxes[i];
+        const cNodeBox = cNode.boundingBox;
+
+        // Iterate through each other node to check alignment
+        for (let j = 0; j < nodesBoundingBoxes.length; j++) {
+          const fNode = nodesBoundingBoxes[j];
+          const fNodeBox = fNode.boundingBox;
+
           // Skip creating an edge to itself
-          if (currentNode === otherNode) {
+          if (cNode.id === fNode.id) {
             continue;
           }
-    
-          // Check if an edge already exists between the two nodes to avoid duplicate edges
-          const existingEdge = this.edges.find(
-            (edge) =>
-              (edge.source === currentNode.attributes.id && edge.target === otherNode.attributes.id) ||
-              (edge.source === otherNode.attributes.id && edge.target === currentNode.attributes.id)
-          );
-    
-          // If no edge exists between currentNode and otherNode, create a new one
-          if (!existingEdge) {
-    
-            // Create an edge with currentNode as source and otherNode as target
-            const fEdge = new GraphEdge(this.id, `e-${edgeCount}`, currentNode.label, otherNode.label, {'cat':'DIRECT ACCESS'})
-            outEdges.push(fEdge);
-            edgeCount++;
-            // Create another edge with the roles reversed (otherNode as source, currentNode as target)
-            const rEdge = new GraphEdge(this.id, `e-${edgeCount}`, currentNode.label, otherNode.label, {'cat':'DIRECT ACCESS'})
-            outEdges.push(rEdge);
-            edgeCount++;
+
+          // Check if nodes are aligned horizontally and vertically within the tolerance
+          const alignedHorizontal =
+            (cNodeBox.x >= fNodeBox.x && fNodeBox.x + fNodeBox.width >= cNodeBox.x) ||
+            (fNodeBox.x >= cNodeBox.x && cNodeBox.x + cNodeBox.width >= fNodeBox.x) ||
+            Math.abs(fNodeBox.x + fNodeBox.width - cNodeBox.x) <= tolerance ||
+            Math.abs(cNodeBox.x + cNodeBox.width - fNodeBox.x) <= tolerance;
+
+          const alignedVertical =
+            (cNodeBox.y >= fNodeBox.y && fNodeBox.y + fNodeBox.height >= cNodeBox.y) ||
+            (fNodeBox.y >= cNodeBox.y && cNodeBox.y + cNodeBox.height >= fNodeBox.y) ||
+            Math.abs(fNodeBox.y + fNodeBox.height - cNodeBox.y) <= tolerance ||
+            Math.abs(cNodeBox.y + cNodeBox.height - fNodeBox.y) <= tolerance;
+
+          // If nodes are aligned both horizontally and vertically, create an edge
+          if (alignedHorizontal && alignedVertical) {
+            // Check if an edge already exists between the two nodes to avoid duplicate edges
+            const existingEdge = this.edges_.find(
+              (edge) =>
+                (edge.source === cNode.id && edge.target === fNode.id) ||
+                (edge.source === fNode.id && edge.target === cNode.id)
+            );
+
+            if (!existingEdge) {
+              // Create an edge with cNode as source and fNode as target
+              const fEdge = new GraphEdge(this.id, `e-${edgeCount}`, cNode.label, fNode.label, { 'cat': 'DIRECT ACCESS' });
+              outEdges.push(fEdge);
+              edgeCount++;
+
+              // Create another edge with the roles reversed (fNode as source, cNode as target)
+              const rEdge = new GraphEdge(this.id, `e-${edgeCount}`, fNode.label, cNode.label, { 'cat': 'DIRECT ACCESS' });
+              outEdges.push(rEdge);
+              edgeCount++;
+            }
           }
         }
       }
-    
+
       return outEdges;
     }
 
