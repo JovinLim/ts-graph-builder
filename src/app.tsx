@@ -10,7 +10,7 @@ export default function App() {
       root={props => (
         <div class='flex flex-col h-screen w-screen'>
           <Nav />
-          <Suspense>{props.children}</Suspense>
+          <Suspense fallback={<div class='items-center text-center font-medium font-2xl'>Loading...</div>}>{props.children}</Suspense>
         </div>
       )}
     >

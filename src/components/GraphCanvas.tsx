@@ -1,13 +1,13 @@
-import { Graph } from "@/lib/core";
+import { Graph, GraphEdge, GraphNode } from "@/lib/core";
 import CreateGraph from "./CreateGraphSheet";
 import { useGraphManager } from "./GraphManagerContext";
-import { createEffect } from "solid-js";
+import { createEffect, onMount } from "solid-js";
 import * as d3 from 'd3';
 
 export default function GraphCanvas() {
-    const { graphs, currentGraph, setCurrentGraph } = useGraphManager(); // Access GraphManager from the context
+    const { graphs, currentGraph, setCurrentGraph, debug, setGraphs } = useGraphManager(); // Access GraphManager from the context
 
-    async function parseGraphJSON(jsonFile: File): Promise<{ nodes: any[]; edges: any[] }> {
+    async function parseGraphJSON(blob: Blob): Promise<{ nodes: any[]; edges: any[] }> {
       return new Promise((resolve, reject) => {
         const reader = new FileReader();
     
@@ -36,9 +36,10 @@ export default function GraphCanvas() {
           reject(new Error("Error reading file"));
         };
     
-        reader.readAsText(jsonFile); // Read the file as text
+        reader.readAsText(blob); // Read the Blob as text
       });
     }
+
     createEffect(() => {
       const graph = currentGraph(); // Get the current graph
       const container = document.getElementById("graph-canvas");
@@ -84,6 +85,60 @@ export default function GraphCanvas() {
         svg.call(zoom); // Reapply zoom behavior to allow future interactions
       }
     };
+
+    onMount(async () => {
+      if (debug()) {
+        // Fetch the file from the /public folder
+        try {
+          const response = await fetch("/test_geometry.json");
+          // const response = await fetch("/test_unitgraph.json");
+          if (!response.ok) {
+            throw new Error("Failed to fetch the file");
+          }
+    
+          const blob = await response.blob(); // Convert response to Blob
+    
+          const graph = new Graph("debug");
+          const nodes_ = [] as GraphNode[];
+          const edges_ = [] as GraphEdge[];
+    
+          if (blob) {
+            await parseGraphJSON(blob).then((result) => {
+              const { nodes, edges } = result;
+              const nodeKeys = Object.keys(nodes);
+              const edgeKeys = Object.keys(edges);
+    
+              for (let n = 0; n < nodeKeys.length; n++) {
+                const nodeKey = nodeKeys[n];
+                const nodeData = nodes[nodeKey as keyof typeof nodes];
+                nodes_.push(new GraphNode(graph.id, nodeKey, nodeData));
+              }
+              graph.nodes = nodes_;
+    
+              // If you want to parse the edges, uncomment this part:
+              /*
+              for (let e = 0; e < edgeKeys.length; e++) {
+                const edgeKey = edgeKeys[e];
+                const edgeData = edges[edgeKey as keyof typeof edges];
+                const edgeAttr = { cat: edgeData.cat };
+                edges_.push(new GraphEdge(graph.id, edgeKey, edgeData.source, edgeData.target, edgeAttr));
+              }
+              graph.edges = edges_;
+              */
+    
+              // Debug
+              // console.log(nodes_);
+              // console.log(edges_[0]);
+            });
+          }
+    
+          setGraphs([...graphs(), graph]);
+          setCurrentGraph(graph);
+        } catch (error) {
+          console.error("Error fetching or setting file:", error);
+        }
+      }
+    });
 
     return (
       <div class="flex w-full h-full items-center justify-center">

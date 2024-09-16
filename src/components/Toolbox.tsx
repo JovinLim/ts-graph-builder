@@ -13,7 +13,7 @@ const Toolbox = () => {
 
         const graph_ = currentGraph() as Graph;
         const edges = graph_.autoEdge();
-        console.log(edges)
+        console.log(edges);
     }
 
     return (

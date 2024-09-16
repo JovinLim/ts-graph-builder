@@ -57,7 +57,8 @@ export class Graph {
       this.edges_ = value;
     }
 
-    public autoEdge(tolerance:number = 1): GraphEdge[] {
+    public autoEdge(tolerance:number = 100): GraphEdge[] {
+      this.edges = [];
       const outEdges = [] as GraphEdge[];
 
       var edgeCount = 0;
@@ -79,6 +80,7 @@ export class Graph {
         return { id: node.id, label: node.label, boundingBox };
       });
 
+      const processedNodeIds = [] as string[];
       // Iterate through each node and find aligned nodes
       for (let i = 0; i < nodesBoundingBoxes.length; i++) {
         const cNode = nodesBoundingBoxes[i];
@@ -86,56 +88,70 @@ export class Graph {
 
         // Iterate through each other node to check alignment
         for (let j = 0; j < nodesBoundingBoxes.length; j++) {
-          const fNode = nodesBoundingBoxes[j];
-          const fNodeBox = fNode.boundingBox;
+          const oNode = nodesBoundingBoxes[j];
+          const oNodeBox = oNode.boundingBox;
 
           // Skip creating an edge to itself
-          if (cNode.id === fNode.id) {
+          if (cNode.id === oNode.id || processedNodeIds.includes(oNode.id)) {
             continue;
           }
+          
+          // console.log(cNode)
+          // console.log(oNode)
+          // console.log("")
 
           // Check if nodes are aligned horizontally and vertically within the tolerance
           const alignedHorizontal =
-            (cNodeBox.x >= fNodeBox.x && fNodeBox.x + fNodeBox.width >= cNodeBox.x) ||
-            (fNodeBox.x >= cNodeBox.x && cNodeBox.x + cNodeBox.width >= fNodeBox.x) ||
-            Math.abs(fNodeBox.x + fNodeBox.width - cNodeBox.x) <= tolerance ||
-            Math.abs(cNodeBox.x + cNodeBox.width - fNodeBox.x) <= tolerance;
+            (cNodeBox.x >= oNodeBox.x && oNodeBox.x + oNodeBox.width >= cNodeBox.x) ||
+            (oNodeBox.x >= cNodeBox.x && cNodeBox.x + cNodeBox.width >= oNodeBox.x) ||
+            Math.abs(oNodeBox.x + oNodeBox.width - cNodeBox.x) <= tolerance ||
+            Math.abs(cNodeBox.x + cNodeBox.width - oNodeBox.x) <= tolerance;
 
           const alignedVertical =
-            (cNodeBox.y >= fNodeBox.y && fNodeBox.y + fNodeBox.height >= cNodeBox.y) ||
-            (fNodeBox.y >= cNodeBox.y && cNodeBox.y + cNodeBox.height >= fNodeBox.y) ||
-            Math.abs(fNodeBox.y + fNodeBox.height - cNodeBox.y) <= tolerance ||
-            Math.abs(cNodeBox.y + cNodeBox.height - fNodeBox.y) <= tolerance;
+            (cNodeBox.y >= oNodeBox.y && oNodeBox.y + oNodeBox.height >= cNodeBox.y) ||
+            (oNodeBox.y >= cNodeBox.y && cNodeBox.y + cNodeBox.height >= oNodeBox.y) ||
+            Math.abs(oNodeBox.y + oNodeBox.height - cNodeBox.y) <= tolerance ||
+            Math.abs(cNodeBox.y + cNodeBox.height - oNodeBox.y) <= tolerance;
+
+          // if (cNode.label = 'n9'){
+          //   console.table(cNode)
+          //   console.table(oNode)
+          //   console.log("Horizontal check: ",(oNodeBox.x >= cNodeBox.x && cNodeBox.x + cNodeBox.width >= oNodeBox.x))
+          //   // console.log(alignedVertical)
+          //   console.log('')
+          // }
 
           // If nodes are aligned both horizontally and vertically, create an edge
           if (alignedHorizontal && alignedVertical) {
             // Check if an edge already exists between the two nodes to avoid duplicate edges
             const existingEdge = this.edges_.find(
               (edge) =>
-                (edge.source === cNode.id && edge.target === fNode.id) ||
-                (edge.source === fNode.id && edge.target === cNode.id)
+                (edge.source === cNode.id && edge.target === oNode.id) ||
+                (edge.source === oNode.id && edge.target === cNode.id)
             );
 
             if (!existingEdge) {
-              // Create an edge with cNode as source and fNode as target
-              const fEdge = new GraphEdge(this.id, `e-${edgeCount}`, cNode.label, fNode.label, { 'cat': 'DIRECT ACCESS' });
+              // Create an edge with cNode as source and oNode as target
+              const fEdge = new GraphEdge(this.id, `e-${edgeCount}`, cNode.label, oNode.label, { 'cat': 'ACCESS' });
               outEdges.push(fEdge);
               edgeCount++;
 
-              // Create another edge with the roles reversed (fNode as source, cNode as target)
-              const rEdge = new GraphEdge(this.id, `e-${edgeCount}`, fNode.label, cNode.label, { 'cat': 'DIRECT ACCESS' });
+              // Create another edge with the roles reversed (oNode as source, cNode as target)
+              const rEdge = new GraphEdge(this.id, `e-${edgeCount}`, oNode.label, cNode.label, { 'cat': 'ACCESS' });
               outEdges.push(rEdge);
               edgeCount++;
             }
           }
         }
+
+        processedNodeIds.push(cNode.id);
       }
 
       return outEdges;
     }
 
     public graphGeometryToSVG(): SVGSVGElement {
-      
+      const graph = this;
       // Create the main SVG element
       const svg = d3.create<SVGSVGElement>("svg")
         .attr("data-type", "GraphGeometryGroup")
@@ -147,14 +163,50 @@ export class Graph {
         .attr("cursor", "grab");
   
       function dragged(this: SVGRectElement, event: d3.D3DragEvent<SVGElement, any, any>, d: any) {
-        console.log(d)
         d3.select(this)
           .attr("x", d.x=event.x)
           .attr("y", d.y=event.y);
       }
 
+      function dragStarted(this: SVGRectElement, event: d3.D3DragEvent<SVGElement, any, any>, d: any) {
+        d.initialX = d.x; // Store initial x position
+        d.initialY = d.y; // Store initial y position
+
+        // FOR DEBUGGING 
+        // const nodeId = d3.select(this).attr("data-nodeid");
+        // const node = graph.nodes.find((node) => node.id === nodeId);
+        // if (node) {
+        //   // Log the initial state of the node
+        //   // console.log("Drag Start - Node:", JSON.stringify(node));
+        //   console.table(node.attributes)
+        // }
+
+      }
+
+      function dragEnded(this: SVGRectElement, event: d3.D3DragEvent<SVGElement, any, any>, d: any) {
+        const nodeId = d3.select(this).attr("data-nodeid");
+        const node = graph.nodes.find((node) => node.id === nodeId);
+        if (node) {
+          // Update the node's attributes with the new position
+          node.attributes.cornerA[0] = (d.x - d.initialX) + node.attributes.cornerA[0];
+          node.attributes.cornerA[1] = (d.y - d.initialY) + node.attributes.cornerA[1];
+          node.attributes.cornerB[0] = node.attributes.cornerA[0] + node.attributes.width;
+          node.attributes.cornerB[1] = node.attributes.cornerA[1] + node.attributes.depth;
+      
+          // Recalculate the center of the node
+          node.attributes.center[0] = (node.attributes.cornerA[0] + node.attributes.cornerB[0]) / 2;
+          node.attributes.center[1] = (node.attributes.cornerA[1] + node.attributes.cornerB[1]) / 2;
+
+          // FOR DEBUGGING
+          // console.log("Drag End - Node:", JSON.stringify(node));
+          // console.table(node.attributes)
+        }
+      }
+
       const drag = d3.drag<SVGRectElement, any>()
-        .on("drag", function (event, d) {dragged.call(this,event,d)})
+                    .on("start", function (event, d) { dragStarted.call(this, event, d); })
+                    .on("drag", function (event, d) { dragged.call(this, event, d); })
+                    .on("end", function (event, d) { dragEnded.call(this, event, d); });
   
       // Append node geometries to the group element
       this.nodes.forEach((node) => {
@@ -173,6 +225,7 @@ export class Graph {
               .attr("fill", "#68b2a1")
               .attr("stroke", "black")
               .attr("stroke-width", 2)
+              .attr("data-nodeid", node.id)
               .call(drag); // Apply the drag behavior
           }
         } catch (error) {

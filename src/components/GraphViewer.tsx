@@ -40,59 +40,6 @@ export default function GraphViewer() {
       });
     }
 
-    onMount(async () => {
-      if (debug()) {
-        // Fetch the file from the /public folder
-        try {
-        // const response = await fetch("/test_geometry.json"); // Fetch the file from the public folder
-        const response = await fetch("/test_unitgraph.json"); // Fetch the file from the public folder
-        if (!response.ok) {
-          throw new Error("Failed to fetch the file");
-        }
-      
-        const blob = await response.blob(); // Convert response to Blob
-        const file = new File([blob], "test_geometry.json", { type: blob.type }); // Create a File object from Blob
-        const graph = new Graph("debug");
-        const nodes_ = [] as GraphNode[];
-        const edges_ = [] as GraphEdge[];
-
-        if (file){
-            await parseGraphJSON(file as File).then(result => {
-                const { nodes, edges } = result
-                const nodeKeys = Object.keys(nodes);
-                const edgeKeys = Object.keys(edges);
-
-                for (let n=0; n<nodeKeys.length; n++){
-                    const nodeKey = nodeKeys[n];
-                    const nodeData = nodes[nodeKey as keyof typeof nodes];
-                    nodes_.push(new GraphNode(graph.id, nodeKey, nodeData));
-                }
-                graph.nodes = nodes_;
-
-                // for (let e=0; e<edgeKeys.length; e++){
-                //     const edgeKey = edgeKeys[e];
-                //     const edgeData = edges[edgeKey as keyof typeof edges];
-                //     const edgeAttr = {'cat':edgeData.cat}
-                //     edges_.push(new GraphEdge(graph.id, edgeKey, edgeData.source, edgeData.target, edgeAttr));
-                // }
-                // graph.edges = edges_;
-
-
-                // Debug
-                console.log(nodes_[0]);
-                // console.log(edges_[0]);
-          });
-        }
-
-        setGraphs([...graphs(), graph]);
-        setCurrentGraph(graph);
-
-        } catch (error) {
-        console.error("Error fetching or setting file:", error);
-        }
-      }
-    });
-
     return (
         <div class="flex w-full h-full items-center justify-center">
           {currentGraph() ? (
