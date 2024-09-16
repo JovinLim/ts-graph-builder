@@ -6,7 +6,6 @@ import Tabs from "@/components/Tabs";
 import Toolbox from "@/components/Toolbox";
 
 export default function Home() {
-
   return (
     <GraphManagerProvider>
       <AlertManager/>

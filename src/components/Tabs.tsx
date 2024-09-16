@@ -1,20 +1,29 @@
-import { createSignal, onCleanup, onMount } from "solid-js";
+import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { useGraphManager } from "./GraphManagerContext";
 import { Graph } from "@/lib/core";
 
 const Tabs = () => {
     const { graphs, currentGraph, setCurrentGraph } = useGraphManager();
     const [currentTab, setCurrentTab] = createSignal(currentGraph()?.id ? currentGraph()?.id : "");
+    const [shownTabs, setShownTabs] = createSignal<string[]>([]);
   
     const handleTabClick = (graphId: string) => {
       setCurrentTab(graphId); // Update the current tab
       setCurrentGraph(graphs().find(g => g.id == graphId));
     };
 
+    const closeTab = (graphId:string) => {
+
+    }
+
+    createEffect(() => {
+      
+    })
+
     return (
       <div class="tabs-bar">
         {graphs().map((graph:Graph) => (
-          <button
+          <div
             data-graphid={graph.id}
             class={`tab ${
               currentGraph()?.id == graph.id
@@ -24,8 +33,8 @@ const Tabs = () => {
             onClick={() => handleTabClick(graph.id)}
           >
             {graph.label || "Untitled Graph"}
-            <p class='font-base'>x</p>
-          </button>
+            <button class='font-base' onclick={() => closeTab(graph.id)}>x</button>
+          </div>
         ))}
       </div>
     );

@@ -1,10 +1,11 @@
 {
-  "name": "example-with-tailwindcss",
+  "name": "ts-graph-builder",
   "type": "module",
   "scripts": {
     "dev": "vinxi dev",
     "build": "vinxi build",
-    "start": "vinxi start"
+    "start": "vinxi start",
+    "docs": "typedoc"
   },
   "dependencies": {
     "@kobalte/core": "^0.13.6",
@@ -33,6 +34,7 @@
     "@types/d3": "^7.4.3",
     "@types/uuid": "^10.0.0",
     "d3": "^7.9.0",
-    "lucide-solid": "^0.439.0"
+    "lucide-solid": "^0.439.0",
+    "typedoc": "^0.26.7"
   }
 }
