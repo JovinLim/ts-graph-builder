@@ -125,10 +125,6 @@ export default function GraphCanvas() {
               }
               graph.edges = edges_;
               */
-    
-              // Debug
-              // console.log(nodes_);
-              // console.log(edges_[0]);
             });
           }
     
