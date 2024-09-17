@@ -1,6 +1,6 @@
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js";
 import { useGraphManager } from "./GraphManagerContext";
-import { Graph } from "@/lib/core";
+import { Graph } from "@/graph-lib/core";
 
 const Tabs = () => {
     const { graphs, currentGraph, setCurrentGraph } = useGraphManager();

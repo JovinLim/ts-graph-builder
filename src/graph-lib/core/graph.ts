@@ -1,7 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { GraphEdge, GraphNode } from '.';
 import * as d3 from "d3";
-import { D3Edge, D3Node } from '../core/draw/graphd3';
+import { D3Edge, D3Node } from './draw/graphd3';
 
 /**
  * Represents a graph with nodes and edges. Provides functionality to manipulate the graph structure,

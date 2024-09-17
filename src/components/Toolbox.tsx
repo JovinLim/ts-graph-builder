@@ -2,7 +2,7 @@ import { createSignal } from "solid-js";
 import { useGraphManager } from "./GraphManagerContext";
 import { Button } from "@/components/ui/button";
 import { createAlert } from "./shared";
-import { Graph } from "@/lib/core";
+import { Graph } from "@/graph-lib/core";
 
 const Toolbox = () => {
     const { graphs, currentGraph, setCurrentGraph } = useGraphManager();

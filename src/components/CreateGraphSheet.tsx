@@ -16,7 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { createSignal, onMount, Show } from "solid-js";
 import { useGraphManager } from "./GraphManagerContext";
-import { Graph, GraphEdge, GraphNode, parseGraphJSON } from "@/lib/core";
+import { Graph, GraphEdge, GraphNode, parseGraphJSON } from "@/graph-lib/core";
 import FileUploadBox from "./FileUploadBox";
 import { debugUtils } from "./Utility";
 import { setUploadedFile, uploadedFile } from "./shared";

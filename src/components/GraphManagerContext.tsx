@@ -1,6 +1,6 @@
 import { createContext, createSignal, useContext } from "solid-js";
 import { createStore } from "solid-js/store";
-import { Graph, GraphEdge, GraphManager, GraphNode } from "@/lib/core";
+import { Graph, GraphEdge, GraphManager, GraphNode } from "@/graph-lib/core";
 
 // Interface defining the Graph Manager structure
 export interface GraphManagerInterface {

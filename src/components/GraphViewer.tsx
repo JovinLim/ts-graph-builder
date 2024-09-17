@@ -1,4 +1,4 @@
-import { Graph, GraphEdge, GraphNode } from "@/lib/core";
+import { Graph, GraphEdge, GraphNode } from "@/graph-lib/core";
 import { useGraphManager } from "./GraphManagerContext";
 import CardDemo from "./CardDemo";
 import CreateGraph from "./CreateGraphSheet";

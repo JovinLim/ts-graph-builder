@@ -1,4 +1,4 @@
-import { Graph, GraphEdge, GraphNode } from "@/lib/core";
+import { Graph, GraphEdge, GraphNode } from "@/graph-lib/core";
 import CreateGraph from "./CreateGraphSheet";
 import { useGraphManager } from "./GraphManagerContext";
 import { createEffect, onMount } from "solid-js";

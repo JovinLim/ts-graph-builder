@@ -114,3 +114,11 @@
 .toolbox {
   @apply fixed z-[50] bottom-[5%] left-1/2 -translate-x-1/2 w-3/4 max-w-2xl bg-gray-100 border rounded-xl drop-shadow -translate-y-1/2 flex flex-row gap-5 p-3 items-center
 }
+
+.text-unselected {
+  @apply text-slate-400 hover:text-slate-800
+}
+
+.text-selected {
+  @apply text-slate-800
+}
