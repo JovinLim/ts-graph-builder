@@ -3,9 +3,10 @@ import CreateGraph from "./CreateGraphSheet";
 import { useGraphManager } from "./GraphManagerContext";
 import { createEffect, onMount } from "solid-js";
 import * as d3 from 'd3';
+import { debug } from "./Constants";
 
 export default function GraphCanvas() {
-    const { graphs, currentGraph, setCurrentGraph, debug, setGraphs } = useGraphManager(); // Access GraphManager from the context
+    const { graphs, currentGraph, setCurrentGraph, setGraphs } = useGraphManager(); // Access GraphManager from the context
 
     async function parseGraphJSON(blob: Blob): Promise<{ nodes: any[]; edges: any[] }> {
       return new Promise((resolve, reject) => {

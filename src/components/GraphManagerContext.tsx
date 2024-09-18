@@ -12,8 +12,6 @@ export interface GraphManagerInterface {
   setCurrentGraph: (graph: Graph | undefined) => void;
   setSelectedNodes: (nodes: GraphNode[]) => void;
   setSelectedEdges: (edges: GraphEdge[]) => void;
-  debug: () => boolean;
-  setDebug: (bool : boolean) => void;
 }
 
 // Create a context to provide the GraphManager globally
@@ -34,7 +32,6 @@ export function GraphManagerProvider(props: { children: any }) {
   const [currentGraph, setCurrentGraph] = createSignal<Graph>();
   const [selectedNodes, setSelectedNodes] = createSignal<GraphNode[]>([]);
   const [selectedEdges, setSelectedEdges] = createSignal<GraphEdge[]>([]);
-  const [debug, setDebug] = createSignal<boolean>(true);
 
   return (
     <GraphManagerContext.Provider value={{
@@ -46,8 +43,6 @@ export function GraphManagerProvider(props: { children: any }) {
       setSelectedNodes,
       selectedEdges,
       setSelectedEdges,
-      debug,
-      setDebug,
     }}>
       {props.children}
     </GraphManagerContext.Provider>

@@ -20,9 +20,10 @@ import { Graph, GraphEdge, GraphNode, parseGraphJSON } from "@/graph-lib/core";
 import FileUploadBox from "./FileUploadBox";
 import { debugUtils } from "./Utility";
 import { setUploadedFile, uploadedFile } from "./shared";
+import { debug } from "./Constants";
 
 export default function CreateGraphSheet() {
-    const {graphs, setGraphs, currentGraph, setCurrentGraph, debug} = useGraphManager();
+    const {graphs, setGraphs, currentGraph, setCurrentGraph} = useGraphManager();
     const [isOpen, setIsOpen] = createSignal(false);
 
     async function onCreateGraph() {

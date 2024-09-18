@@ -2,6 +2,7 @@ import { render } from 'solid-js/web';
 
 export const debugUtils = {
     graphName : "test",
+    datasetName: "dataset-test",
 }
 
 export function toElement(s='',c : any = undefined, t=document.createElement('template'),l='length')

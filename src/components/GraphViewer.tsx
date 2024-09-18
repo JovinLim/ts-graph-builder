@@ -5,7 +5,7 @@ import CreateGraph from "./CreateGraphSheet";
 import { onMount } from "solid-js";
 
 export default function GraphViewer() {
-    const {currentGraph, debug, setGraphs, setCurrentGraph, graphs} = useGraphManager();
+    const {currentGraph, setGraphs, setCurrentGraph, graphs} = useGraphManager();
 
     async function parseGraphJSON(jsonFile: File): Promise<{ nodes: any[]; edges: any[] }> {
       return new Promise((resolve, reject) => {

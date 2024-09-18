@@ -3,8 +3,6 @@ import { Button } from "@/components/ui/button";
 import { createSignal } from "solid-js";
 import { useGraphManager } from "./GraphManagerContext";
 import { Graph, GraphEdge, GraphNode, parseGraphJSON } from "@/graph-lib/core";
-import FileUploadBox from "./FileUploadBox";
-import { debugUtils } from "./Utility";
 import { uploadedFile } from "./shared";
 import {
 	Card,
@@ -22,7 +20,7 @@ import {
 import { For } from "solid-js";
 
 const CreateGraphCard = () => {
-    const {graphs, setGraphs, currentGraph, setCurrentGraph, debug} = useGraphManager();
+    const {graphs, setGraphs, currentGraph, setCurrentGraph} = useGraphManager();
     const [isOpen, setIsOpen] = createSignal(true);
 
     async function onCreateGraph() {
