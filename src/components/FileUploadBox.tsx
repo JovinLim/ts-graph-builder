@@ -1,6 +1,6 @@
 import { Button } from "./ui/button";
 import { createAlert, setUploadedFile, uploadedFile } from "./shared";
-import { parseGraphJSON } from "@/graph-lib/core";
+import { parseGraphJSON } from "@/lib/graph-core";
 
 
 const FileUploadBox = () => {

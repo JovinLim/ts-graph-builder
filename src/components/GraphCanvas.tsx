@@ -1,4 +1,4 @@
-import { Graph, GraphEdge, GraphNode } from "@/graph-lib/core";
+import { Graph, GraphEdge, GraphNode } from "@/lib/graph-core";
 import CreateGraph from "./CreateGraphSheet";
 import { useGraphManager } from "./GraphManagerContext";
 import { createEffect, onMount } from "solid-js";
@@ -89,6 +89,7 @@ export default function GraphCanvas() {
 
     onMount(async () => {
       if (debug()) {
+        console.log('Debug mode ON')
         // Fetch the file from the /public folder
         try {
           const response = await fetch("/test_geometry.json");

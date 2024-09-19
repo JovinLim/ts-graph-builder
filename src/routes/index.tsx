@@ -1,5 +1,10 @@
 import AlertManager from "@/components/AlertManager";
+import { debug } from "@/components/Constants";
 import { Button } from "@/components/ui/button";
+import { Form, FormContent, FormDescription, FormFooter, FormHeader, FormTitle, FormTrigger } from "@/components/ui/form";
+import { TextField, TextFieldLabel, TextFieldRoot } from "@/components/ui/textfield";
+import { debugUtils } from "@/components/Utility";
+import { DialogTriggerProps } from "@kobalte/core/dialog";
 import { onMount, createSignal } from "solid-js";
 
 export default function Datasets() {
@@ -24,14 +29,16 @@ export default function Datasets() {
 
   // Function to handle creating a new dataset
   const handleCreateDataset = () => {
-    // Logic to create a new dataset, e.g., show a modal or redirect to a form
+    // Logic to create a new dataset, e.g., show a modal or redirect to a Form
     console.log("Create a new dataset");
+
     // alert("Feature to create a new dataset will be implemented here.");
   };
 
   return (
     <main class="flex h-[95%] flex-col items-center justify-center">
       <AlertManager />
+      
       {loading() ? (
         <p class='font-semibold text-slate-800 text-lg'>Loading...</p>
       ) : databases().length === 0 ? (
@@ -42,16 +49,37 @@ export default function Datasets() {
             <p class="font-medium text-slate-800 text-base">You don't have any datasets. Let's create one</p>
           </div>
           <div class="flex flex-col gap-y-5 w-full">
-            <Button
-              variant={"outline"}
-              onClick={handleCreateDataset}
-              class="border-2 h-16 font-semibold text-slate-800 text-lg"
-            >
-              Create Dataset
-            </Button>
+          <Form>
+            <FormTrigger
+              as={(props: DialogTriggerProps) => (
+                <Button class="border-2 h-16 font-semibold text-slate-800 text-lg" variant="outline" {...props}>
+                  Create graph
+                </Button>
+              )}
+            />
+            <FormContent class='w-1/4'>
+              <FormHeader>
+                <FormTitle>Create Dataset</FormTitle>
+                <FormDescription>
+                  Fill up some details about your dataset.
+                </FormDescription>
+              </FormHeader>
+              <div class="grid gap-4 py-4 w-full">
+                <TextFieldRoot class="flex flex-row items-center">
+                  <TextFieldLabel class="text-left w-1/5">Name</TextFieldLabel>
+                  <TextField id='create-dataset-name-input' class="w-4/5" value={debug() ? debugUtils.datasetName : ""}/>
+                </TextFieldRoot>
+                <TextFieldRoot class="flex flex-row items-center">
+                  <TextFieldLabel class="text-left w-1/5">Description</TextFieldLabel>
+                  <TextField id='create-dataset-name-input' class="w-4/5" placeholder="Type your description here..." value=""/>
+                </TextFieldRoot>
+              </div>
+              <FormFooter class='flex items-center align-center'>
+                <Button id="create-dataset-submit" onclick={handleCreateDataset} type="submit">Save Dataset</Button>
+              </FormFooter>
+            </FormContent>
+          </Form>
           </div>
-
-
         </div>
       ) : (
         <div class="dataset-list">

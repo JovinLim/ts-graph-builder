@@ -12,7 +12,7 @@ export default function Nav() {
           <a href="/" class='text-selected font-semibold p-2'>Datasets</a>
         </li>
         <li class={`${active("/editor")}`}>
-          <a href="/" class='text-unselected font-semibold p-2'>Editor</a>
+          <a href="/editor" class='text-unselected font-semibold p-2'>Editor</a>
         </li>
       </ul>
     </nav>
